@@ -6,13 +6,17 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 public class Backgammon extends Application {
+    public static final double HEIGHT = 1040.0;
+    public static final double WIDTH = 600.0;
+    private ArrayList<Point> points;
+    private ArrayList<Checker> checkers;
     
     @Override
     public void start(Stage primaryStage) {
         Pane root = new Pane();
         root.setStyle("-fx-background-color: #70412f;");
         
-        Scene scene = new Scene(root, 1040, 600);
+        Scene scene = new Scene(root, HEIGHT, WIDTH);
         
         primaryStage.setTitle("Backgammon");
         primaryStage.setScene(scene);
@@ -31,21 +35,43 @@ public class Backgammon extends Application {
     }
 
     public void makeBoard(Pane root){
-        ArrayList<Point> points = new ArrayList<>();
+        points = new ArrayList<>();
 
         for (int i = 0; i < 6; i++){
-            points.add(new Point(80*i, 0, i));
+            points.add(new Point(Point.WIDTH*i, 0, i));
         }
         for (int i = 6; i < 12; i++){
-            points.add(new Point(80+80*i, 0, i));
+            points.add(new Point(Point.WIDTH+Point.WIDTH*i, 0, i));
         }
 
         for (int i = 0; i < 6; i++){
-            points.add(new Point(960-80*i, 350, i+12));
+            points.add(new Point((HEIGHT-Point.WIDTH)-Point.WIDTH*i, (WIDTH-Point.HEIGHT), i+12));
         }
         for (int i = 6; i < 12; i++){
-            points.add(new Point(880-80*i, 350, i+12));
+            points.add(new Point((HEIGHT-2*Point.WIDTH)-Point.WIDTH*i, (WIDTH-Point.HEIGHT), i+12));
         }
         root.getChildren().addAll(points);
+
+        checkers = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++){
+            checkers.add(new Checker(0, points.get(5)));
+            checkers.add(new Checker(1, points.get(11)));
+            checkers.add(new Checker(0, points.get(12)));
+            checkers.add(new Checker(1, points.get(18)));
+        }
+
+        for (int i = 0; i < 3; i++){
+            checkers.add(new Checker(0, points.get(7)));
+            checkers.add(new Checker(1, points.get(16)));
+        }
+
+        for (int i = 0; i < 2; i++){
+            checkers.add(new Checker(1, points.get(0)));
+            checkers.add(new Checker(0, points.get(23)));
+        }
+
+        
+        root.getChildren().addAll(checkers);
     }
 }
