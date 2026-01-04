@@ -56,4 +56,8 @@ public class Dice extends ImageView{
 	public int getValue(){
 		return diceVal;
 	}
+
+	public void reset(){
+		diceVal = -1;
+	}
 }

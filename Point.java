@@ -91,30 +91,54 @@ public class Point extends Polygon {
         return checkers.remove(checkers.size() - 1);
     }
 
+    public void selectPoint(){
+        this.setStroke(Color.YELLOW);
+        this.setStrokeWidth(3);
+        selected = true;
+    }
+
+    public void unselectPoint(){
+        this.setStrokeWidth(0);
+        selected = false;
+    }
+
     public void clicked(){
+        HumanPlayer player = Backgammon.currentPlayer;
+
         if (selected){
+            // If the player clicked on a selected point, then the point becomes unselected
             this.setStrokeWidth(0);
-            Backgammon.currentPlayer.setSelected(null);
+            player.setSelected(null);
             selected = false;
             return;
         }
 
-        if (Backgammon.currentPlayer.getSelected() == null){
-            Backgammon.currentPlayer.setSelected(this);
-            this.setStroke(Color.YELLOW);
-            this.setStrokeWidth(3);
-            selected = true;
+        if (player.getSelected() == null){
+            // If player clicks on a point, and the player has no point selected, then we try to select it
+            if (this.numCheckers == 0){
+                // this ensures that players cannot select points with no checkers
+                return;
+            }
+            if (this.checkers.get(0).getColor() != player.getColor()){
+                // this ensures that players cannot select points with checkers of the opponents color
+                return;
+            }
+            player.setSelected(this);
+            this.selectPoint();
         }
         else{
-            if (Backgammon.currentPlayer.isValidMove(this)){
-                System.out.println("VALID MOVE!!");
-                Backgammon.currentPlayer.moveChecker(this);
+            if (player.isValidMove(this)){
+                // If the player has selected a point, and this point is a valid move for one of those checkers then we move it
+                player.moveChecker(this);
+                if (player.getSelected().numCheckers == 0){
+                    // this ensures that if all checkers are moved off a point then it is unselected
+                    player.getSelected().unselectPoint();
+                }
             }
             else{
                 System.out.println("INVALID MOVE!!");
             }
             
         }
-        
     }
 }

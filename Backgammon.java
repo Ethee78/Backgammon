@@ -11,8 +11,11 @@ public class Backgammon extends Application {
     public static final double WIDTH = 1040.0;
     public static final double HEIGHT = 600.0;
     public static HumanPlayer currentPlayer;
+    private static HumanPlayer p1;
+    private static HumanPlayer p2;
     private ArrayList<Point> points;
     private ArrayList<Checker> checkers;
+    private static ArrayList<Dice> die = new ArrayList<>();
     
     @Override
     public void start(Stage primaryStage) {
@@ -34,6 +37,8 @@ public class Backgammon extends Application {
 
         Dice dice1 = new Dice((200-2*Dice.HEIGHT)/3+WIDTH, (HEIGHT-Dice.HEIGHT)/2);
         Dice dice2 = new Dice(WIDTH-(200-2*Dice.HEIGHT)/3-Dice.HEIGHT+200, (HEIGHT-Dice.HEIGHT)/2);
+        die.add(dice1);
+        die.add(dice2);
         Button rollDice = new Button("Roll the Dice!");
         rollDice.setLayoutY((HEIGHT-Dice.HEIGHT)/2 + Dice.HEIGHT + 10);
         rollDice.setLayoutX((200-2*Dice.HEIGHT)/3+WIDTH + 30);
@@ -48,14 +53,28 @@ public class Backgammon extends Application {
         
         System.out.println("Backgammon game started!");
 
-        HumanPlayer p1 = new HumanPlayer();
+        p1 = new HumanPlayer(0);
+        p2 = new HumanPlayer(1);
         currentPlayer = p1;
+
 
         makeBoard(root);
     }
     
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public static void swapPlayers(){
+        if (currentPlayer == p1){
+            currentPlayer = p2;
+        }
+        else{
+            currentPlayer = p1;
+        }
+        for (Dice dice : die){
+            dice.reset();
+        }
     }
 
     public void makeBoard(Pane root){

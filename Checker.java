@@ -9,13 +9,15 @@ import javafx.scene.text.Text;
 public class Checker extends Circle {
     public static final double RADIUS = 25;
     private Point currentPoint;
+    private int color; // 0 = white, 1 = black
     
 
-    public Checker(int color, Point pointIn){
+    public Checker(int colorIn, Point pointIn){
     	super(RADIUS);
     	currentPoint = pointIn;
+        color = colorIn;
 
-        if (color == 0){
+        if (colorIn == 0){
             this.setFill(Color.WHITE);
             this.setStroke(Color.BLACK);
             this.setStrokeWidth(3);
@@ -44,6 +46,10 @@ public class Checker extends Circle {
 
     public Point getCurrentPoint(){
         return currentPoint;
+    }
+
+    public int getColor(){
+        return color;
     }
 
 }
