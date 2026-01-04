@@ -26,6 +26,7 @@ public class Checker extends Circle {
             this.setStrokeWidth(3);
         }
         putOnPoint(pointIn);
+        this.setMouseTransparent(true); // Important to ensure that users can click on points without being blocked by a checker
     }
 
     public void putOnPoint(Point p){
@@ -38,7 +39,7 @@ public class Checker extends Circle {
             setLayoutY(p.getNextPosY()-RADIUS); 
         }
         
-        p.incrementNumCheckers();
+        p.addChecker(this);
     }
 
     public Point getCurrentPoint(){

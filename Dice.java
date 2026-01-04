@@ -28,27 +28,29 @@ public class Dice extends ImageView{
 	}
 
 	public void roll(){
-		diceVal = (int)(Math.random() * 6) + 1;
+		if(diceVal == -1){
+			diceVal = (int)(Math.random() * 6) + 1;
 
-		rollAnimation = new Timeline();
+			rollAnimation = new Timeline();
 
-		for (int i = 0; i < 10; i++){
-			final int frameIndex = i;
-			KeyFrame keyFrame = new KeyFrame(
-				Duration.millis(i * 100),
-				e -> {
-					if (frameIndex < 9){
-						setImage(dicefaces[(int)(Math.random() * 6)]);
-					} 
-					else{
-						setImage(dicefaces[diceVal - 1]);
+			for (int i = 0; i < 10; i++){
+				final int frameIndex = i;
+				KeyFrame keyFrame = new KeyFrame(
+					Duration.millis(i * 100),
+					e -> {
+						if (frameIndex < 9){
+							setImage(dicefaces[(int)(Math.random() * 6)]);
+						} 
+						else{
+							setImage(dicefaces[diceVal - 1]);
+						}
 					}
-				}
-			);
-			rollAnimation.getKeyFrames().add(keyFrame);
+				);
+				rollAnimation.getKeyFrames().add(keyFrame);
+			}
+			rollAnimation.setCycleCount(1);
+			rollAnimation.play();
 		}
-		rollAnimation.setCycleCount(1);
-		rollAnimation.play();
 	}
 
 	public int getValue(){

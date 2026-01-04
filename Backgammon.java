@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 public class Backgammon extends Application {
     public static final double WIDTH = 1040.0;
     public static final double HEIGHT = 600.0;
+    public static HumanPlayer currentPlayer;
     private ArrayList<Point> points;
     private ArrayList<Checker> checkers;
     
@@ -40,11 +41,15 @@ public class Backgammon extends Application {
         rollDice.setOnAction(event -> {
             dice1.roll();
             dice2.roll();
+            currentPlayer.setDiceRolls(new int[]{dice1.getValue(), dice2.getValue(), 0,0});
         });
 
         root.getChildren().addAll(dice1, dice2, rollDice);
         
         System.out.println("Backgammon game started!");
+
+        HumanPlayer p1 = new HumanPlayer();
+        currentPlayer = p1;
 
         makeBoard(root);
     }

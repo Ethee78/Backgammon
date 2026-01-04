@@ -14,6 +14,8 @@ public class Point extends Polygon {
     private double x;
     private double y;
     private int id;
+    private ArrayList<Checker> checkers;
+    private boolean selected;
 
     public Point(double xIn, double yIn, int idIn){
     	super();
@@ -21,6 +23,8 @@ public class Point extends Polygon {
         x = xIn;
         y = yIn;
         id = idIn;
+        checkers = new ArrayList<>();
+        selected = false;
 
     	if (id < 12){
     		getPoints().addAll(new Double[]{
@@ -46,6 +50,8 @@ public class Point extends Polygon {
     	
     	setLayoutX(x);
     	setLayoutY(y);
+
+        this.setOnMouseClicked(e->{this.clicked();});
     }
 
     public double getX(){
@@ -71,6 +77,43 @@ public class Point extends Polygon {
         }
         else{
             return y - (WIDTH/2 * numCheckers) + HEIGHT;
+        }
+        
+    }
+
+    public void addChecker(Checker c){
+        checkers.add(c);
+        incrementNumCheckers();
+    }
+
+    public Checker popChecker(){
+        decrementNumCheckers();
+        return checkers.remove(checkers.size() - 1);
+    }
+
+    public void clicked(){
+        if (selected){
+            this.setStrokeWidth(0);
+            Backgammon.currentPlayer.setSelected(null);
+            selected = false;
+            return;
+        }
+
+        if (Backgammon.currentPlayer.getSelected() == null){
+            Backgammon.currentPlayer.setSelected(this);
+            this.setStroke(Color.YELLOW);
+            this.setStrokeWidth(3);
+            selected = true;
+        }
+        else{
+            if (Backgammon.currentPlayer.isValidMove(this)){
+                System.out.println("VALID MOVE!!");
+                Backgammon.currentPlayer.moveChecker(this);
+            }
+            else{
+                System.out.println("INVALID MOVE!!");
+            }
+            
         }
         
     }
