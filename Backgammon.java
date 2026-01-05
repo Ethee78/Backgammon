@@ -46,7 +46,12 @@ public class Backgammon extends Application {
         rollDice.setOnAction(event -> {
             dice1.roll();
             dice2.roll();
-            currentPlayer.setDiceRolls(new int[]{dice1.getValue(), dice2.getValue(), 0,0});
+            if (dice1.getValue() == dice2.getValue()){
+                currentPlayer.setDiceRolls(new int[]{dice1.getValue(), dice1.getValue(), dice1.getValue(), dice1.getValue()});
+            }
+            else{
+                currentPlayer.setDiceRolls(new int[]{dice1.getValue(), dice2.getValue(), 0,0});
+            }
         });
 
         root.getChildren().addAll(dice1, dice2, rollDice);
