@@ -45,6 +45,11 @@ public class HumanPlayer{
 		int id1 = selected.getPointId();
 		int id2 = p.getPointId();
 
+		if ((color == 0) && (Checker.numCapturedWhite != 0)||
+			(color == 1) && (Checker.numCapturedBlack != 0)){
+			return false;
+		}
+
 		if (p.getNumCheckers() > 1){
 			if (p.getCheckers().get(0).getColor() != this.color){
 				// ensures that checkers cannot be put ontop of stacks of size more than one of the opposing color
@@ -97,6 +102,7 @@ public class HumanPlayer{
 			System.out.println(endPoint.getCheckers().get(0).getColor());
 			if (endPoint.getCheckers().get(0).getColor() != this.color){
 				endPoint.getCheckers().get(0).capture();
+				endPoint.popChecker();
 			}
 		}
 
@@ -141,6 +147,36 @@ public class HumanPlayer{
 		if (Arrays.equals(diceRolls, new int[]{0,0,0,0})){
 			System.out.println("Turn OVER");
 			endTurn();
+		}
+	}
+
+	public void comeInOn(Point p){
+		// NEED TO WORK ON THIS NEXT - MUST MAKE IT SO THAT PLAYER CANNOT PUT CAPTURED PIECE ON SOMETHING OCCUPIED BY OPPONENT
+		if (color == 0){
+			if (p.getPointId() < 18){
+				return;
+			}
+			for (int i = 3; i >= 0; i--){
+				if (diceRolls[i] == 24 - p.getPointId()){
+					diceRolls[i] = 0;
+					Checker c = Checker.popCapturedW();
+					c.putOnPoint(p);
+					return;
+				}
+			}
+		}
+		else{
+			if (p.getPointId() > 5){
+				return;
+			}
+			for (int i = 3; i >= 0; i--){
+				if (diceRolls[i] == 1 + p.getPointId()){
+					diceRolls[i] = 0;
+					Checker c = Checker.popCapturedB();
+					c.putOnPoint(p);
+					return;
+				}
+			}
 		}
 	}
 

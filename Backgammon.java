@@ -4,6 +4,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Button;
 
@@ -31,9 +32,13 @@ public class Backgammon extends Application {
         
         primaryStage.show();
 
-        Rectangle diceArea = new Rectangle(1040, 0, 200, HEIGHT);
+        Rectangle diceArea = new Rectangle(WIDTH, 0, 200, HEIGHT);
         diceArea.setFill(Color.web("#a82e23"));
         root.getChildren().add(diceArea);
+
+        Rectangle captureArea = new Rectangle(6*(Point.WIDTH),0,Point.WIDTH,HEIGHT);
+        captureArea.setFill(Color.web("#522e21"));
+        root.getChildren().add(captureArea);
 
         Dice dice1 = new Dice((200-2*Dice.HEIGHT)/3+WIDTH, (HEIGHT-Dice.HEIGHT)/2);
         Dice dice2 = new Dice(WIDTH-(200-2*Dice.HEIGHT)/3-Dice.HEIGHT+200, (HEIGHT-Dice.HEIGHT)/2);
@@ -46,11 +51,13 @@ public class Backgammon extends Application {
         rollDice.setOnAction(event -> {
             dice1.roll();
             dice2.roll();
-            if (dice1.getValue() == dice2.getValue()){
-                currentPlayer.setDiceRolls(new int[]{dice1.getValue(), dice1.getValue(), dice1.getValue(), dice1.getValue()});
-            }
-            else{
-                currentPlayer.setDiceRolls(new int[]{dice1.getValue(), dice2.getValue(), 0,0});
+            if (Arrays.equals(currentPlayer.getDiceRolls(), new int[]{0,0,0,0})){
+                if (dice1.getValue() == dice2.getValue()){
+                    currentPlayer.setDiceRolls(new int[]{dice1.getValue(), dice1.getValue(), dice1.getValue(), dice1.getValue()});
+                }
+                else{
+                    currentPlayer.setDiceRolls(new int[]{dice1.getValue(), dice2.getValue(), 0,0});
+                }
             }
         });
 

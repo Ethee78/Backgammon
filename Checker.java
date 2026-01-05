@@ -4,6 +4,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import java.util.ArrayList;
 
 
 public class Checker extends Circle {
@@ -12,7 +13,26 @@ public class Checker extends Circle {
     public static final double RADIUS = 25;
     private Point currentPoint;
     private int color; // 0 = white, 1 = black
-    
+    private static ArrayList<Checker> capturedW = new ArrayList<>();
+    private static ArrayList<Checker> capturedB = new ArrayList<>();
+
+    public static ArrayList<Checker> getCapturedW(){
+        return capturedW;
+    }
+
+    public static ArrayList<Checker> getCapturedB(){
+        return capturedB;
+    }
+
+    public static Checker popCapturedW(){
+        numCapturedWhite = numCapturedWhite - 1;
+        return capturedW.remove(capturedW.size() - 1);
+    }
+
+    public static Checker popCapturedB(){
+        numCapturedBlack = numCapturedBlack - 1;
+        return capturedB.remove(capturedB.size() - 1);
+    }
 
     public Checker(int colorIn, Point pointIn){
     	super(RADIUS);
@@ -55,8 +75,18 @@ public class Checker extends Circle {
     }
 
     public void capture(){
-        setLayoutX(Point.WIDTH * 6 + RADIUS + (Point.WIDTH/2-RADIUS));
-        setLayoutY(RADIUS);
+        if (color == 0){
+            setLayoutX(Point.WIDTH * 6 + RADIUS + (Point.WIDTH/2-RADIUS));
+            setLayoutY(Backgammon.HEIGHT/2 + RADIUS + numCapturedWhite*RADIUS);
+            numCapturedWhite = numCapturedWhite + 1;
+            capturedW.add(this);
+        }
+        else{
+            setLayoutX(Point.WIDTH * 6 + RADIUS + (Point.WIDTH/2-RADIUS));
+            setLayoutY(Backgammon.HEIGHT/2 - RADIUS - numCapturedBlack*RADIUS);
+            numCapturedBlack = numCapturedBlack + 1;
+            capturedB.add(this);
+        }
     }
 
 }

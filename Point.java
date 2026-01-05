@@ -125,6 +125,12 @@ public class Point extends Polygon {
         }
 
         if (player.getSelected() == null){
+            if ((player.getColor() == 0) && (Checker.numCapturedWhite != 0)||
+                (player.getColor() == 1) && (Checker.numCapturedBlack != 0)){
+                // this deals with situation where player has captured pieces and must come in first
+                player.comeInOn(this);
+                return;
+            }
             // If player clicks on a point, and the player has no point selected, then we try to select it
             if (this.numCheckers == 0){
                 // this ensures that players cannot select points with no checkers
