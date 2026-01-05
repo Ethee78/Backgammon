@@ -91,6 +91,9 @@ public class Point extends Polygon {
     }
 
     public Checker popChecker(){
+        if (numCheckers == 0){
+            return null;
+        }
         decrementNumCheckers();
         return checkers.remove(checkers.size() - 1);
     }
@@ -142,10 +145,12 @@ public class Point extends Polygon {
                     if (player.getSelected().numCheckers == 0){
                         // this ensures that if all checkers are moved off a point then it is unselected
                         player.getSelected().unselectPoint();
+                        player.setSelected(null);
                     }
                 }   
             }
             else{
+                System.out.println(player.getSelected().getPointId());
                 System.out.println("INVALID MOVE!!");
             }
             

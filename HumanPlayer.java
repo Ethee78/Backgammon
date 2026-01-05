@@ -52,21 +52,41 @@ public class HumanPlayer{
 			}
 		}
 
-		if (id1 + diceRolls[0] == id2){
-			return true;
+		if (color == 1){
+			if (id1 + diceRolls[0] == id2){
+				return true;
+			}
+			if (id1 + diceRolls[1] == id2){
+				return true;
+			}
+			if (id1 + diceRolls[0] + diceRolls[1] == id2){
+				return true;
+			}
+			// These next two cases only occur if we have doubles
+			if (id1 + diceRolls[0] + diceRolls[1] + diceRolls[2] == id2){
+				return true;
+			}
+			if (id1 + diceRolls[0] + diceRolls[1] + diceRolls[2] + diceRolls[3] == id2){
+				return true;
+			}
 		}
-		if (id1 + diceRolls[1] == id2){
-			return true;
-		}
-		if (id1 + diceRolls[0] + diceRolls[1] == id2){
-			return true;
-		}
-		// These next two cases only occur if we have doubles
-		if (id1 + diceRolls[0] + diceRolls[1] + diceRolls[2] == id2){
-			return true;
-		}
-		if (id1 + diceRolls[0] + diceRolls[1] + diceRolls[2] + diceRolls[3] == id2){
-			return true;
+		else{
+			if (id1 - diceRolls[0] == id2){
+				return true;
+			}
+			if (id1 - diceRolls[1] == id2){
+				return true;
+			}
+			if (id1 - diceRolls[0] - diceRolls[1] == id2){
+				return true;
+			}
+			// These next two cases only occur if we have doubles
+			if (id1 - diceRolls[0] - diceRolls[1] - diceRolls[2] == id2){
+				return true;
+			}
+			if (id1 - diceRolls[0] - diceRolls[1] - diceRolls[2] - diceRolls[3] == id2){
+				return true;
+			}
 		}
 		return false;
 	}
