@@ -150,7 +150,6 @@ public class Point extends Polygon {
                 }   
             }
             else{
-                System.out.println(player.getSelected().getPointId());
                 System.out.println("INVALID MOVE!!");
             }
             

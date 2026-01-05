@@ -7,6 +7,8 @@ import javafx.scene.text.Text;
 
 
 public class Checker extends Circle {
+    public static int numCapturedBlack = 0;
+    public static int numCapturedWhite = 0;
     public static final double RADIUS = 25;
     private Point currentPoint;
     private int color; // 0 = white, 1 = black
@@ -50,6 +52,11 @@ public class Checker extends Circle {
 
     public int getColor(){
         return color;
+    }
+
+    public void capture(){
+        setLayoutX(Point.WIDTH * 6 + RADIUS + (Point.WIDTH/2-RADIUS));
+        setLayoutY(RADIUS);
     }
 
 }

@@ -92,6 +92,14 @@ public class HumanPlayer{
 	}
 
 	public void moveChecker(Point endPoint){
+		System.out.println(endPoint.getNumCheckers());
+		if (endPoint.getNumCheckers() == 1){
+			System.out.println(endPoint.getCheckers().get(0).getColor());
+			if (endPoint.getCheckers().get(0).getColor() != this.color){
+				endPoint.getCheckers().get(0).capture();
+			}
+		}
+
 		int distance = Math.abs(selected.getPointId() - endPoint.getPointId());
 		Checker c = selected.popChecker();
 		c.putOnPoint(endPoint);
