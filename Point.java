@@ -62,6 +62,10 @@ public class Point extends Polygon {
         return id;
     }
 
+    public int getNumCheckers(){
+        return numCheckers;
+    }
+
     public void incrementNumCheckers(){
         numCheckers = numCheckers + 1;
     }
@@ -89,6 +93,10 @@ public class Point extends Polygon {
     public Checker popChecker(){
         decrementNumCheckers();
         return checkers.remove(checkers.size() - 1);
+    }
+
+    public ArrayList<Checker> getCheckers(){
+        return checkers;
     }
 
     public void selectPoint(){
@@ -130,10 +138,12 @@ public class Point extends Polygon {
             if (player.isValidMove(this)){
                 // If the player has selected a point, and this point is a valid move for one of those checkers then we move it
                 player.moveChecker(this);
-                if (player.getSelected().numCheckers == 0){
-                    // this ensures that if all checkers are moved off a point then it is unselected
-                    player.getSelected().unselectPoint();
-                }
+                if (player.getSelected() != null){
+                    if (player.getSelected().numCheckers == 0){
+                        // this ensures that if all checkers are moved off a point then it is unselected
+                        player.getSelected().unselectPoint();
+                    }
+                }   
             }
             else{
                 System.out.println("INVALID MOVE!!");

@@ -34,6 +34,7 @@ public class HumanPlayer{
 			System.out.print(diceRolls[i]);
 		}
 		System.out.print("]");
+		System.out.println();
 	}
 
 	public void setDiceRolls(int[] diceRollsIn){
@@ -43,6 +44,13 @@ public class HumanPlayer{
 	public boolean isValidMove(Point p){
 		int id1 = selected.getPointId();
 		int id2 = p.getPointId();
+
+		if (p.getNumCheckers() > 1){
+			if (p.getCheckers().get(0).getColor() != this.color){
+				// ensures that checkers cannot be put ontop of stacks of size more than one of the opposing color
+				return false;
+			}
+		}
 
 		if (id1 + diceRolls[0] == id2){
 			return true;
