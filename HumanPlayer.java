@@ -8,14 +8,27 @@ public class HumanPlayer extends Player{
 		selected = null;
 	}
 
+	@Override
 	public Point getSelected(){
 		return selected;
 	}
 
+	@Override
 	public void setSelected(Point p){
 		selected = p;
 	}
 
+	@Override
+	public void beginTurn(){
+		if (color == 0){
+			System.out.println("Currently White's turn");
+		}
+		else{
+			System.out.println("Currently Black's turn");
+		}
+	}
+
+	@Override
 	public boolean isValidMove(Point p){
 		// this checks if the move clicked on is valid. Only needed for Human player for this reason
 		int id1 = selected.getPointId();
@@ -96,7 +109,6 @@ public class HumanPlayer extends Player{
 					System.out.println("Turn OVER");
 					endTurn();
 				}
-				displayDiceRolls();
 				return;
 			}
 		}
@@ -134,6 +146,6 @@ public class HumanPlayer extends Player{
 			selected = null;
 		}
 		Backgammon.swapPlayers();	
-	}    
+	}
 
 }

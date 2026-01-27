@@ -64,10 +64,15 @@ public class Checker extends Circle {
         }
         
         p.addChecker(this);
+        setCurrentPoint(p);
     }
 
     public Point getCurrentPoint(){
         return currentPoint;
+    }
+
+    public void setCurrentPoint(Point p){
+        currentPoint = p;
     }
 
     public int getColor(){

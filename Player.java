@@ -84,4 +84,19 @@ public abstract class Player{
     public void endTurn(){
         Backgammon.swapPlayers();
     }
+
+    public abstract void beginTurn();
+    public abstract void moveChecker(Point endPoint);
+
+    public Point getSelected(){
+        return null;
+    }
+
+    public void setSelected(Point p){
+        return;
+    }
+
+    public boolean isValidMove(Point p){
+        return false;
+    }
 }
