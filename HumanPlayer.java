@@ -1,18 +1,11 @@
 import java.util.Arrays;
 
-public class HumanPlayer{
+public class HumanPlayer extends Player{
 	private Point selected;
-	private int[] diceRolls;
-	private int color; // 0 = white, 1 = black
 
 	public HumanPlayer(int colorIn){
+		super(colorIn);
 		selected = null;
-		diceRolls = new int[4];
-		color = colorIn;
-	}
-
-	public int getColor(){
-		return color;
 	}
 
 	public Point getSelected(){
@@ -23,25 +16,8 @@ public class HumanPlayer{
 		selected = p;
 	}
 
-	public int[] getDiceRolls(){
-		return diceRolls;
-	}
-
-	private void displayDiceRolls(){
-		// this is created just for testing
-		System.out.print("[");
-		for (int i=0; i<4; i++){
-			System.out.print(diceRolls[i]);
-		}
-		System.out.print("]");
-		System.out.println();
-	}
-
-	public void setDiceRolls(int[] diceRollsIn){
-		diceRolls = diceRollsIn;
-	}
-
 	public boolean isValidMove(Point p){
+		// this checks if the move clicked on is valid. Only needed for Human player for this reason
 		int id1 = selected.getPointId();
 		int id2 = p.getPointId();
 
@@ -97,6 +73,7 @@ public class HumanPlayer{
 	}
 
 	public void moveChecker(Point endPoint){
+		// this moves an actual checker piece, it is not for verifying a moves validity (see above for this)
 		System.out.println(endPoint.getNumCheckers());
 		if (endPoint.getNumCheckers() == 1){
 			System.out.println(endPoint.getCheckers().get(0).getColor());
@@ -150,36 +127,7 @@ public class HumanPlayer{
 		}
 	}
 
-	public void comeInOn(Point p){
-		// NEED TO WORK ON THIS NEXT - MUST MAKE IT SO THAT PLAYER CANNOT PUT CAPTURED PIECE ON SOMETHING OCCUPIED BY OPPONENT
-		if (color == 0){
-			if (p.getPointId() < 18){
-				return;
-			}
-			for (int i = 3; i >= 0; i--){
-				if (diceRolls[i] == 24 - p.getPointId()){
-					diceRolls[i] = 0;
-					Checker c = Checker.popCapturedW();
-					c.putOnPoint(p);
-					return;
-				}
-			}
-		}
-		else{
-			if (p.getPointId() > 5){
-				return;
-			}
-			for (int i = 3; i >= 0; i--){
-				if (diceRolls[i] == 1 + p.getPointId()){
-					diceRolls[i] = 0;
-					Checker c = Checker.popCapturedB();
-					c.putOnPoint(p);
-					return;
-				}
-			}
-		}
-	}
-
+	@Override
 	public void endTurn(){
 		if (selected != null){
 			selected.unselectPoint();
