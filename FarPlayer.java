@@ -6,6 +6,11 @@ import javafx.util.Duration;
 
 
 public class FarPlayer extends Player{
+    /* This is a very basic AI agent, that will always pick moves
+    by prioritizing moving the pieces furthest away from their home
+    fist.
+    */
+
     public FarPlayer(int colorIn){
         super(colorIn);
     }
@@ -53,6 +58,7 @@ public class FarPlayer extends Player{
                     continue;
                 }
                 if (isValidMove(p)){
+                    System.out.println("Moved from point " + c.getCurrentPoint().getPointId() + " to point " + p.getPointId());
                     c.getCurrentPoint().popChecker().putOnPoint(p);
                     diceRolls[i] = 0; 
                 }
@@ -77,7 +83,28 @@ public class FarPlayer extends Player{
 
     @Override
     public boolean isValidMove(Point p){
-        return true;
+        /* this function works quite differently to the equivalent in the HumanPlayer
+        in that one we need to check if the move is reachable by dice, whilst here the
+        function is only ever called on moves that are reachable by dice
+        */
+
+        if (p.getCheckers().size() == 0){
+            return true;
+        }
+        else if (p.getCheckers().get(0).getColor() == this.color){
+            return true;
+        }
+        else{
+            if (p.getCheckers().size() == 1){
+                // code for capturing goes here 
+                p.getCheckers().get(0).capture();
+                p.popChecker();
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
     }
 
     private void rollDice(){

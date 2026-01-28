@@ -87,7 +87,6 @@ public class HumanPlayer extends Player{
 
 	public void moveChecker(Point endPoint){
 		// this moves an actual checker piece, it is not for verifying a moves validity (see above for this)
-		System.out.println(endPoint.getNumCheckers());
 		if (endPoint.getNumCheckers() == 1){
 			System.out.println(endPoint.getCheckers().get(0).getColor());
 			if (endPoint.getCheckers().get(0).getColor() != this.color){
