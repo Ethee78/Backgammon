@@ -29,11 +29,45 @@ public class FarPlayer extends Player{
     public void makeMoves(){
         ArrayList<Checker> allCheckers = Backgammon.getCheckers();
         ArrayList<Checker> myCheckers = new ArrayList<>();
+        ArrayList<Checker> myCaptured = new ArrayList<>();
 
         for(Checker c : allCheckers){
             if (c.getColor() == color){
-                myCheckers.add(c);
+                if (c.getCurrentPoint() == null){
+                    myCaptured.add(c);
+                } 
+                else{
+                    myCheckers.add(c);
+                }
             }
+        }
+
+        int replacedCounter = 0;
+        if (myCaptured.size() != 0){
+            for (Checker c : myCaptured){
+                if (color == 0){
+                    for (int i = 0; i < 4; i++){
+                        if (comeInOn(Backgammon.getPointAtId(24 - diceRolls[i]))){
+                            replacedCounter = replacedCounter + 1;
+                            break;
+                        }
+                    }
+                }
+                else{
+                    for (int i = 0; i < 4; i++){
+                        if (comeInOn(Backgammon.getPointAtId(diceRolls[i] - 1))){
+                            replacedCounter = replacedCounter + 1;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (myCaptured.size() != replacedCounter){
+            // this ensures that if there are any checkers that cannot be placed then the turn ends
+            endTurn();
+            return;
         }
 
         sortCheckers(myCheckers);

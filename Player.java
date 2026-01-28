@@ -29,17 +29,17 @@ public abstract class Player{
         System.out.println();
     }
 
-    public void comeInOn(Point p){
+    public boolean comeInOn(Point p){
         // This function is important for captured pieces being re-entered onto the board
         if (color == 0){
             if (p.getCheckers().size() > 1){
                 if (p.getCheckers().get(0).getColor() == 1){
                     // this stops allowing put pieces ontop of towers of opposing colour
-                    return;
+                    return false;
                 }
             }
             if (p.getPointId() < 18){
-                return;
+                return false;
             }
             for (int i = 3; i >= 0; i--){
                 if (diceRolls[i] == 24 - p.getPointId()){
@@ -51,7 +51,7 @@ public abstract class Player{
                     diceRolls[i] = 0;
                     Checker c = Checker.popCapturedW();
                     c.putOnPoint(p);
-                    return;
+                    return true;
                 }
             }
         }
@@ -59,11 +59,11 @@ public abstract class Player{
             if (p.getCheckers().size() > 1){
                 if (p.getCheckers().get(0).getColor() == 0){
                     // this stops allowing put pieces ontop of towers of opposing colour
-                    return;
+                    return false;
                 }
             }
             if (p.getPointId() > 5){
-                return;
+                return false;
             }
             for (int i = 3; i >= 0; i--){
                 if (diceRolls[i] == 1 + p.getPointId()){
@@ -75,10 +75,11 @@ public abstract class Player{
                     diceRolls[i] = 0;
                     Checker c = Checker.popCapturedB();
                     c.putOnPoint(p);
-                    return;
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     public void endTurn(){
