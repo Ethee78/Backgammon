@@ -136,6 +136,7 @@ public class HumanPlayer extends Player{
 		int distance = Math.abs(selected.getPointId() - endPoint.getPointId());
 		Checker c = selected.popChecker();
 		c.putOnPoint(endPoint);
+		updateAllHome();
 
 		// This next part removes the move from the list of avaiable dice rolls
 
@@ -178,11 +179,11 @@ public class HumanPlayer extends Player{
 
 	@Override
 	public void endTurn(){
+		super.endTurn();
 		if (selected != null){
 			selected.unselectPoint();
 			selected = null;
 		}
-		Backgammon.swapPlayers();	
 	}
 
 }

@@ -1,10 +1,27 @@
+import java.util.ArrayList;
+
 public abstract class Player{
     protected int[] diceRolls;
     protected int color; // 0 = white, 1 = black
+    protected boolean allHome;
+    protected ArrayList<Checker> myCheckers;
 
     public Player(int colorIn){
         diceRolls = new int[4];
         color = colorIn;
+        allHome = false;
+
+        ArrayList<Checker> allCheckers = Backgammon.getCheckers();
+        myCheckers = new ArrayList<>();
+        for(Checker c : allCheckers){
+            if (c.getColor() == color){
+                myCheckers.add(c);
+            }
+        }
+    }
+
+    public boolean isAllHome(){
+        return allHome;
     }
 
     public int getColor(){
@@ -17,6 +34,26 @@ public abstract class Player{
 
     public void setDiceRolls(int[] diceRollsIn){
         diceRolls = diceRollsIn;
+    }
+
+    public void updateAllHome(){
+        if (color == 0){
+            for (Checker c : myCheckers){
+                if (c.getCurrentPoint().getPointId() > 5){
+                    allHome = false;
+                    return;
+                }
+            }
+        }
+        else{
+            for (Checker c : myCheckers){
+                if (c.getCurrentPoint().getPointId() < 18){
+                    allHome = false;
+                    return;
+                }
+            }
+        }
+        allHome = true;
     }
 
     protected void displayDiceRolls(){
@@ -51,6 +88,7 @@ public abstract class Player{
                     diceRolls[i] = 0;
                     Checker c = Checker.popCapturedW();
                     c.putOnPoint(p);
+                    allHome = false;
                     return true;
                 }
             }
@@ -75,6 +113,7 @@ public abstract class Player{
                     diceRolls[i] = 0;
                     Checker c = Checker.popCapturedB();
                     c.putOnPoint(p);
+                    allHome = false;
                     return true;
                 }
             }
@@ -84,10 +123,19 @@ public abstract class Player{
 
     public void endTurn(){
         Backgammon.swapPlayers();
+        if (allHome){
+            System.out.println("Ready to start taking pieces off!");
+        }
+        else{
+            System.out.println("Still some pieces need to come home");
+        }
     }
 
     public abstract void beginTurn();
-    public abstract void moveChecker(Point endPoint);
+
+    public void moveChecker(Point endPoint){
+        return;
+    }
 
     public Point getSelected(){
         return null;

@@ -16,7 +16,14 @@ public class FarPlayer extends Player{
     }
 
     public void beginTurn(){
-        System.out.println("Selecting move");
+        if (color == 0){
+            System.out.println("Currently White's turn");
+        }
+        else{
+            System.out.println("Currently Black's turn");
+        }
+
+        System.out.println("AI is Selecting move");
         rollDice();
 
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
@@ -27,26 +34,26 @@ public class FarPlayer extends Player{
     }
 
     public void makeMoves(){
-        ArrayList<Checker> allCheckers = Backgammon.getCheckers();
-        ArrayList<Checker> myCheckers = new ArrayList<>();
-        ArrayList<Checker> myCaptured = new ArrayList<>();
+        ArrayList<Checker> unCapturedCheckers = new ArrayList<>();
+        ArrayList<Checker> capturedCheckers = new ArrayList<>();
 
-        for(Checker c : allCheckers){
-            if (c.getColor() == color){
-                if (c.getCurrentPoint() == null){
-                    myCaptured.add(c);
-                } 
-                else{
-                    myCheckers.add(c);
-                }
+        for(Checker c : myCheckers){
+            if (c.getCurrentPoint() == null){
+                capturedCheckers.add(c);
+            } 
+            else{
+                unCapturedCheckers.add(c);
             }
         }
 
         int replacedCounter = 0;
-        if (myCaptured.size() != 0){
-            for (Checker c : myCaptured){
+        if (capturedCheckers.size() != 0){
+            for (Checker c : capturedCheckers){
                 if (color == 0){
                     for (int i = 0; i < 4; i++){
+                        if (diceRolls[i] == 0){
+                            continue;
+                        }
                         if (comeInOn(Backgammon.getPointAtId(24 - diceRolls[i]))){
                             replacedCounter = replacedCounter + 1;
                             break;
@@ -55,6 +62,9 @@ public class FarPlayer extends Player{
                 }
                 else{
                     for (int i = 0; i < 4; i++){
+                        if (diceRolls[i] == 0){
+                            continue;
+                        }
                         if (comeInOn(Backgammon.getPointAtId(diceRolls[i] - 1))){
                             replacedCounter = replacedCounter + 1;
                             break;
@@ -64,15 +74,15 @@ public class FarPlayer extends Player{
             }
         }
 
-        if (myCaptured.size() != replacedCounter){
+        if (capturedCheckers.size() != replacedCounter){
             // this ensures that if there are any checkers that cannot be placed then the turn ends
             endTurn();
             return;
         }
 
-        sortCheckers(myCheckers);
+        sortCheckers(unCapturedCheckers);
         while (!(Arrays.equals(this.getDiceRolls(), new int[]{0,0,0,0}))){
-            Checker c = myCheckers.get(0);
+            Checker c = unCapturedCheckers.get(0);
 
             for (int i = 0; i < 4; i++){
                 if (diceRolls[i] == 0){
@@ -94,10 +104,11 @@ public class FarPlayer extends Player{
                 if (isValidMove(p)){
                     System.out.println("Moved from point " + c.getCurrentPoint().getPointId() + " to point " + p.getPointId());
                     c.getCurrentPoint().popChecker().putOnPoint(p);
+                    updateAllHome();
                     diceRolls[i] = 0; 
                 }
             }
-            myCheckers.remove(c);
+            unCapturedCheckers.remove(c);
         }
         endTurn();
     }
@@ -157,9 +168,5 @@ public class FarPlayer extends Player{
             }
         }
         displayDiceRolls();
-    }
-
-    public void moveChecker(Point endPoint){
-        return;
     }
 }
