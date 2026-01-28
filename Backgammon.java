@@ -67,13 +67,11 @@ public class Backgammon extends Application {
         
         System.out.println("Backgammon game started!");
 
+        makeBoard(root);
         p1 = new HumanPlayer(0);
         p2 = new FarPlayer(1);
         currentPlayer = p1;
         currentPlayer.beginTurn();
-
-
-        makeBoard(root);
     }
     
     public static void main(String[] args) {
@@ -99,6 +97,15 @@ public class Backgammon extends Application {
 
     public static ArrayList<Checker> getCheckers(){
         return checkers;
+    }
+
+    public static Point getPointAtId(int idIn){
+        for (Point p : points){
+            if (p.getPointId() == idIn){
+                return p;
+            }
+        }
+        return null;
     }
 
     public static void makeBoard(Pane root){

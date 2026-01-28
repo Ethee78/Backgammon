@@ -92,6 +92,7 @@ public class Checker extends Circle {
             numCapturedBlack = numCapturedBlack + 1;
             capturedB.add(this);
         }
+        setCurrentPoint(null);
     }
 
 }
