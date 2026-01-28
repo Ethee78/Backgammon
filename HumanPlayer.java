@@ -54,7 +54,26 @@ public class HumanPlayer extends Player{
 				return true;
 			}
 			if (id1 + diceRolls[0] + diceRolls[1] == id2){
-				return true;
+				if (Backgammon.getPointAtId(id1 + diceRolls[0]).getNumCheckers() == 0){
+					return true;
+				}
+				else if (Backgammon.getPointAtId(id1 + diceRolls[1]).getNumCheckers() == 0){
+					return true;
+				} 
+				else if ((Backgammon.getPointAtId(id1 + diceRolls[0]).getNumCheckers() == 1) && 
+					(Backgammon.getPointAtId(id1 + diceRolls[0]).getCheckers().get(0).getColor() != this.color)){
+						
+					Backgammon.getPointAtId(id1 + diceRolls[0]).getCheckers().get(0).capture();
+					Backgammon.getPointAtId(id1 + diceRolls[0]).popChecker();
+					return true;
+				}
+				else if ((Backgammon.getPointAtId(id1 + diceRolls[1]).getNumCheckers() == 1) && 
+					(Backgammon.getPointAtId(id1 + diceRolls[1]).getCheckers().get(0).getColor() != this.color)){
+						
+					Backgammon.getPointAtId(id1 + diceRolls[1]).getCheckers().get(0).capture();
+					Backgammon.getPointAtId(id1 + diceRolls[1]).popChecker();
+					return true;
+				}
 			}
 			// These next two cases only occur if we have doubles
 			if (id1 + diceRolls[0] + diceRolls[1] + diceRolls[2] == id2){
@@ -72,7 +91,26 @@ public class HumanPlayer extends Player{
 				return true;
 			}
 			if (id1 - diceRolls[0] - diceRolls[1] == id2){
-				return true;
+				if (Backgammon.getPointAtId(id1 - diceRolls[0]).getNumCheckers() == 0){
+					return true;
+				}
+				else if (Backgammon.getPointAtId(id1 - diceRolls[1]).getNumCheckers() == 0){
+					return true;
+				} 
+				else if ((Backgammon.getPointAtId(id1 - diceRolls[0]).getNumCheckers() == 1) && 
+					(Backgammon.getPointAtId(id1 - diceRolls[0]).getCheckers().get(0).getColor() != this.color)){
+						
+					Backgammon.getPointAtId(id1 - diceRolls[0]).getCheckers().get(0).capture();
+					Backgammon.getPointAtId(id1 - diceRolls[0]).popChecker();
+					return true;
+				}
+				else if ((Backgammon.getPointAtId(id1 - diceRolls[1]).getNumCheckers() == 1) && 
+					(Backgammon.getPointAtId(id1 - diceRolls[1]).getCheckers().get(0).getColor() != this.color)){
+						
+					Backgammon.getPointAtId(id1 - diceRolls[1]).getCheckers().get(0).capture();
+					Backgammon.getPointAtId(id1 - diceRolls[1]).popChecker();
+					return true;
+				}
 			}
 			// These next two cases only occur if we have doubles
 			if (id1 - diceRolls[0] - diceRolls[1] - diceRolls[2] == id2){
