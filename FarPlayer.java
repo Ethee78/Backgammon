@@ -35,158 +35,135 @@ public class FarPlayer extends Player{
     }
 
     public void makeMoves(){
-        ArrayList<Checker> unCapturedCheckers = new ArrayList<>();
-        ArrayList<Checker> capturedCheckers = new ArrayList<>();
-        Iterator<Checker> iterator = myCheckers.iterator();
-
-
-        if (this.isAllHome()){
-            sortCheckers(myCheckers);
-            for (Checker c : myCheckers){
-                for (int i = 0; i < 4; i++){
-                    if (c.getCurrentPoint() == null){
-                        continue;
-                    }
-                    if (((diceRolls[i] == c.getCurrentPoint().getPointId() + 1) && (color == 0)) ||
-                        (diceRolls[i] == 24 - c.getCurrentPoint().getPointId()) && (color == 1)){
-
-                        Checker r = c.getCurrentPoint().popChecker();
-                        System.out.println("Taken checker off of point " + r.getCurrentPoint().getPointId());
-                        r.goHome();
-                        diceRolls[i] = 0;
-                    }
-                }
-            }
-
-            while (iterator.hasNext()){
-                Checker c = iterator.next();
-                if (c.isHome()){
-                    iterator.remove();
-                }
-            }
-
-            endTurn();
-            return;
-        }
-
-        for(Checker c : myCheckers){
-            if (c.getCurrentPoint() == null){
-                capturedCheckers.add(c);
-            } 
-            else{
-                unCapturedCheckers.add(c);
-            }
-        }
-
-        int replacedCounter = 0;
-        if (capturedCheckers.size() != 0){
-            for (Checker c : capturedCheckers){
-                if (color == 0){
-                    for (int i = 0; i < 4; i++){
-                        if (diceRolls[i] == 0){
-                            continue;
-                        }
-                        if (comeInOn(Backgammon.getPointAtId(24 - diceRolls[i]))){
-                            replacedCounter = replacedCounter + 1;
-                            break;
-                        }
-                    }
-                }
-                else{
-                    for (int i = 0; i < 4; i++){
-                        if (diceRolls[i] == 0){
-                            continue;
-                        }
-                        if (comeInOn(Backgammon.getPointAtId(diceRolls[i] - 1))){
-                            replacedCounter = replacedCounter + 1;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (capturedCheckers.size() != replacedCounter){
-            // this ensures that if there are any checkers that cannot be placed then the turn ends
-            endTurn();
-            return;
-        }
-
-        sortCheckers(unCapturedCheckers);
         while (!(Arrays.equals(this.getDiceRolls(), new int[]{0,0,0,0}))){
-            if (unCapturedCheckers.size() == 0){
-                System.out.println("No available moves - skipping turn now");
-                endTurn();
-                return;
+            ArrayList<Move> moves = findAllMoves();
+            if (moves.size() == 0){
+                break;
             }
-            Checker c = unCapturedCheckers.get(0);
-
+            Move m = pickMove(moves);
             for (int i = 0; i < 4; i++){
                 if (diceRolls[i] == 0){
                     continue;
                 }
-                int possibleMove = 0;
-                if (color == 0){
-                    //white
-                    possibleMove = c.getCurrentPoint().getPointId() - diceRolls[i];
-                }
-                else{
-                    //black
-                    possibleMove = c.getCurrentPoint().getPointId() + diceRolls[i];
-                }
-                Point p = Backgammon.getPointAtId(possibleMove);
-                if (p == null){
-                    continue;
-                }
-                if (isValidMove(p)){
-                    System.out.println("Moved from point " + c.getCurrentPoint().getPointId() + " to point " + p.getPointId());
-                    c.getCurrentPoint().popChecker().putOnPoint(p);
+                if (diceRolls[i] == m.getDice()){
+                    m.doMove();
                     updateAllHome();
-                    diceRolls[i] = 0; 
+                    diceRolls[i] = 0;
+
+                    break;
                 }
             }
-            unCapturedCheckers.remove(c);
         }
+
         endTurn();
     }
 
-    public void sortCheckers(ArrayList<Checker> checkerArr){
+    public Move pickMove(ArrayList<Move> moves){
+        moves = sortMoves(moves);
+        return moves.get(0);
+    }
+
+    public ArrayList<Move> sortMoves(ArrayList<Move> moves){
         if (color == 0){
-            checkerArr.sort(Comparator.comparingInt(
-                (Checker c) -> c.getCurrentPoint().getPointId()
+            moves.sort(Comparator.comparingInt(
+                (Move m) -> m.getStartPoint()
             ).reversed());
         }
         else{
-            checkerArr.sort(Comparator.comparingInt(
-                (Checker c) -> c.getCurrentPoint().getPointId()
+            moves.sort(Comparator.comparingInt(
+                (Move m) -> m.getStartPoint()
             ));
         }
+        return moves;
     }
 
-    @Override
-    public boolean isValidMove(Point p){
-        /* this function works quite differently to the equivalent in the HumanPlayer
-        in that one we need to check if the move is reachable by dice, whilst here the
-        function is only ever called on moves that are reachable by dice
-        */
+    public ArrayList<Move> findAllMoves(){
+        ArrayList<Point> points = Backgammon.getPoints();
+        ArrayList<Move> nextMoves = new ArrayList<>();
+        ArrayList<Checker> capturedPieces = new ArrayList<>();
 
-        if (p.getCheckers().size() == 0){
-            return true;
-        }
-        else if (p.getCheckers().get(0).getColor() == this.color){
-            return true;
+        if (color == 0){
+            capturedPieces = Checker.getCapturedW();
         }
         else{
-            if (p.getCheckers().size() == 1){
-                // code for capturing goes here 
-                p.getCheckers().get(0).capture();
-                p.popChecker();
-                return true;
+            capturedPieces = Checker.getCapturedB();
+        }
+
+        if (capturedPieces.size() != 0){
+            for (Checker c : capturedPieces){
+                for (int i = 0; i < 4; i++){
+                    if (diceRolls[i] == 0){
+                        continue;
+                    }
+                    if (color == 0){
+                        if (Backgammon.getPointAtId(24 - diceRolls[i]).getCheckers().size() > 1){
+                            if (Backgammon.getPointAtId(24 - diceRolls[i]).getCheckers().get(0).getColor() != this.color){
+                                continue;
+                            }
+                        }
+                        nextMoves.add(new Move(-1, 24 - diceRolls[i], diceRolls[i]));
+                    }
+                    else{
+                        if (Backgammon.getPointAtId(diceRolls[i] - 1).getCheckers().size() > 1){
+                            if (Backgammon.getPointAtId(diceRolls[i] - 1).getCheckers().get(0).getColor() != this.color){
+                                continue;
+                            }
+                        }
+                        nextMoves.add(new Move(-1, diceRolls[i] - 1, diceRolls[i]));
+                    }
+                }
             }
-            else{
-                return false;
+            return nextMoves;
+        }
+
+        for (Point p : points){
+            if (p.getCheckers().size() == 0){
+                continue;
+            }
+            if (p.getCheckers().get(0).getColor() != this.color){
+                continue;
+            }
+            Checker c = p.getCheckers().get(0);
+            for (int i = 0; i < 4; i++){
+                if (diceRolls[i] == 0){
+                    continue;
+                }
+                Move m;
+                if (this.color == 0){
+                    if ((c.getPointId() - diceRolls[i]) < 0){
+                        continue;
+                    } 
+                    m = new Move(c.getPointId(), c.getPointId() - diceRolls[i], diceRolls[i]);
+                }
+                else{
+                    if ((c.getPointId() - diceRolls[i]) > 23){
+                        continue;
+                    } 
+                    m = new Move(c.getPointId(), c.getPointId() + diceRolls[i], diceRolls[i]);
+                }
+                nextMoves.add(m);
+            } 
+        }
+
+        ArrayList<Move> filteredMoves = new ArrayList<>();
+
+        for (Move m : nextMoves){
+            Point p = Backgammon.getPointAtId(m.getEndPoint());
+            if (p == null){
+                continue;
+            }
+
+            if (p.getCheckers().size() <= 1){
+                filteredMoves.add(m);
+                continue;
+            }
+            if (p.getCheckers().get(0).getColor() == this.color){
+                filteredMoves.add(m);
+                continue;
             }
         }
+
+        return filteredMoves;
     }
 
     private void rollDice(){

@@ -72,6 +72,25 @@ public class Checker extends Circle {
         return currentPoint;
     }
 
+    public int getPointId(){
+        /* Returns 0-23 to represent the point with that ID
+           Returns -1 to represent a piece that has been captured
+           Returns 24 for a piece that has successfully been taken off
+
+        */
+        if (currentPoint != null){
+            return currentPoint.getPointId();
+        }
+        else{
+            if (isHome()){
+                return 24;
+            }
+            else{
+                return -1;
+            }
+        }
+    }
+
     public void setCurrentPoint(Point p){
         currentPoint = p;
     }

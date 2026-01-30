@@ -30,7 +30,6 @@ public class Dice extends ImageView{
 	public void roll(){
 		if(diceVal == -1){
 			diceVal = (int)(Math.random() * 6) + 1;
-			System.out.println(diceVal);
 
 			rollAnimation = new Timeline();
 
