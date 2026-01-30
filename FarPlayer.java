@@ -47,6 +47,7 @@ public class FarPlayer extends Player{
                 }
                 if (diceRolls[i] == m.getDice()){
                     m.doMove();
+
                     updateAllHome();
                     diceRolls[i] = 0;
 
@@ -111,6 +112,7 @@ public class FarPlayer extends Player{
                         }
                         nextMoves.add(new Move(-1, diceRolls[i] - 1, diceRolls[i]));
                     }
+    
                 }
             }
             return nextMoves;
@@ -122,21 +124,29 @@ public class FarPlayer extends Player{
                     continue;
                 }
                 if (color == 0){
-                    if (Backgammon.getPointAtId(diceRolls[i] - 1).getCheckers().size() == 0){
-                        continue;
-                    }
-                    if (Backgammon.getPointAtId(diceRolls[i] - 1).getCheckers().get(0).getColor() == this.color){
-                        nextMoves.add(new Move(diceRolls[i] - 1, 24, diceRolls[i]));
+                    for (Checker c : myCheckers){
+                        if (c.getPointId() == 24){
+                            continue;
+                        }
+                        if (c.getPointId() + 1 <= diceRolls[i]){
+                            nextMoves.add(new Move(c.getPointId(),24,diceRolls[i]));
+                        }
                     }
                 }
                 else{
-                    if (Backgammon.getPointAtId(24 - diceRolls[i]).getCheckers().size() == 0){
-                        continue;
-                    }
-                    if (Backgammon.getPointAtId(24 - diceRolls[i]).getCheckers().get(0).getColor() == this.color){
-                        nextMoves.add(new Move(24 - diceRolls[i], 24, diceRolls[i]));
-                    }
+                    for (Checker c : myCheckers){
+                        if (c.getPointId() == 24){
+                            continue;
+                        }
+                        if (24 - c.getPointId() <= diceRolls[i]){
+                            nextMoves.add(new Move(c.getPointId(),24,diceRolls[i]));
+                        }
+                    }        
                 }
+            }
+
+            for (Move m : nextMoves){
+                m.print();
             }
         }
 
