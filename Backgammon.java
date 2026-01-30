@@ -17,6 +17,7 @@ public class Backgammon extends Application {
     private static ArrayList<Point> points;
     private static ArrayList<Checker> checkers;
     private static ArrayList<Dice> die = new ArrayList<>();
+    private static boolean isPlaying = true;
     
     @Override
     public void start(Stage primaryStage) {
@@ -162,4 +163,19 @@ public class Backgammon extends Application {
         
         root.getChildren().addAll(checkers);
     }
+
+    public static void gameOver(){
+        if (currentPlayer.getColor() == 0){
+            System.out.println("WHITE WINS GAME OVER");
+        }
+        else{
+            System.out.println("BLACK WINS GAME OVER");
+        }
+        isPlaying = false;
+    }
+
+    public static boolean isPlaying(){
+        return isPlaying;
+    }
+
 }

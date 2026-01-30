@@ -144,10 +144,6 @@ public class FarPlayer extends Player{
                     }        
                 }
             }
-
-            for (Move m : nextMoves){
-                m.print();
-            }
         }
 
         for (Point p : points){

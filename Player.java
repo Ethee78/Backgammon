@@ -60,6 +60,15 @@ public abstract class Player{
             }
         }
         allHome = true;
+
+        for (Checker c : myCheckers){
+            if (!(c.isTakenOff())){
+                return;
+            }
+        }
+        // reaching this point is only possible if all pieces have been taken off, so the game is over
+
+        Backgammon.gameOver();
     }
 
     protected void displayDiceRolls(){
@@ -128,12 +137,14 @@ public abstract class Player{
     }
 
     public void endTurn(){
-        Backgammon.swapPlayers();
-        if (allHome){
-            System.out.println("Ready to start taking pieces off!");
-        }
-        else{
-            System.out.println("Still some pieces need to come home");
+        if (Backgammon.isPlaying()){
+            Backgammon.swapPlayers();
+            if (allHome){
+                System.out.println("Ready to start taking pieces off!");
+            }
+            else{
+                System.out.println("Still some pieces need to come home");
+            }
         }
     }
 
