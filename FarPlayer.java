@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration; 
+import java.util.Iterator;
 
 
 public class FarPlayer extends Player{
@@ -36,6 +37,37 @@ public class FarPlayer extends Player{
     public void makeMoves(){
         ArrayList<Checker> unCapturedCheckers = new ArrayList<>();
         ArrayList<Checker> capturedCheckers = new ArrayList<>();
+        Iterator<Checker> iterator = myCheckers.iterator();
+
+
+        if (this.isAllHome()){
+            sortCheckers(myCheckers);
+            for (Checker c : myCheckers){
+                for (int i = 0; i < 4; i++){
+                    if (c.getCurrentPoint() == null){
+                        continue;
+                    }
+                    if (((diceRolls[i] == c.getCurrentPoint().getPointId() + 1) && (color == 0)) ||
+                        (diceRolls[i] == 24 - c.getCurrentPoint().getPointId()) && (color == 1)){
+
+                        Checker r = c.getCurrentPoint().popChecker();
+                        System.out.println("Taken checker off of point " + r.getCurrentPoint().getPointId());
+                        r.goHome();
+                        diceRolls[i] = 0;
+                    }
+                }
+            }
+
+            while (iterator.hasNext()){
+                Checker c = iterator.next();
+                if (c.isHome()){
+                    iterator.remove();
+                }
+            }
+
+            endTurn();
+            return;
+        }
 
         for(Checker c : myCheckers){
             if (c.getCurrentPoint() == null){
@@ -159,18 +191,16 @@ public class FarPlayer extends Player{
 
     private void rollDice(){
         ArrayList<Dice> die = Backgammon.getDie();
-        System.out.println(die.size());
         Dice dice1 = die.get(0);
         Dice dice2 = die.get(1);
         dice1.roll();
         dice2.roll();
-        if (Arrays.equals(this.getDiceRolls(), new int[]{0,0,0,0})){
-            if (dice1.getValue() == dice2.getValue()){
-                this.setDiceRolls(new int[]{dice1.getValue(), dice1.getValue(), dice1.getValue(), dice1.getValue()});
-            }
-            else{
-                this.setDiceRolls(new int[]{dice1.getValue(), dice2.getValue(), 0,0});
-            }
+        diceRolls = new int[]{0,0,0,0};
+        if (dice1.getValue() == dice2.getValue()){
+            this.setDiceRolls(new int[]{dice1.getValue(), dice1.getValue(), dice1.getValue(), dice1.getValue()});
+        }
+        else{
+            this.setDiceRolls(new int[]{dice1.getValue(), dice2.getValue(), 0,0});
         }
         displayDiceRolls();
     }
