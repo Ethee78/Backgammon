@@ -82,6 +82,11 @@ public class FarPlayer extends Player{
 
         sortCheckers(unCapturedCheckers);
         while (!(Arrays.equals(this.getDiceRolls(), new int[]{0,0,0,0}))){
+            if (unCapturedCheckers.size() == 0){
+                System.out.println("No available moves - skipping turn now");
+                endTurn();
+                return;
+            }
             Checker c = unCapturedCheckers.get(0);
 
             for (int i = 0; i < 4; i++){
