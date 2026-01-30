@@ -13,7 +13,7 @@ public class Checker extends Circle {
     public static final double RADIUS = 25;
     private Point currentPoint;
     private int color; // 0 = white, 1 = black
-    private boolean isHome = false;
+    private boolean isTakenOff = false;
     private static ArrayList<Checker> capturedW = new ArrayList<>();
     private static ArrayList<Checker> capturedB = new ArrayList<>();
 
@@ -82,7 +82,7 @@ public class Checker extends Circle {
             return currentPoint.getPointId();
         }
         else{
-            if (isHome()){
+            if (isTakenOff()){
                 return 24;
             }
             else{
@@ -95,13 +95,13 @@ public class Checker extends Circle {
         currentPoint = p;
     }
 
-    public boolean isHome(){
-        return isHome;
+    public boolean isTakenOff(){
+        return isTakenOff;
     }
 
-    public void goHome(){
+    public void takeOff(){
         currentPoint = null;
-        isHome = true;
+        isTakenOff = true;
         setVisible(false); 
     }
 

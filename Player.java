@@ -39,6 +39,9 @@ public abstract class Player{
     public void updateAllHome(){
         if (color == 0){
             for (Checker c : myCheckers){
+                if (c.isTakenOff()){
+                    continue;
+                }
                 if (c.getCurrentPoint().getPointId() > 5){
                     allHome = false;
                     return;
@@ -47,6 +50,9 @@ public abstract class Player{
         }
         else{
             for (Checker c : myCheckers){
+                if (c.isTakenOff()){
+                    continue;
+                }
                 if (c.getCurrentPoint().getPointId() < 18){
                     allHome = false;
                     return;

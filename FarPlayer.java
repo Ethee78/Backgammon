@@ -116,6 +116,30 @@ public class FarPlayer extends Player{
             return nextMoves;
         }
 
+        if (this.isAllHome()){
+            for(int i = 0; i < 4; i++){
+                if (diceRolls[i] == 0){
+                    continue;
+                }
+                if (color == 0){
+                    if (Backgammon.getPointAtId(diceRolls[i] - 1).getCheckers().size() == 0){
+                        continue;
+                    }
+                    if (Backgammon.getPointAtId(diceRolls[i] - 1).getCheckers().get(0).getColor() == this.color){
+                        nextMoves.add(new Move(diceRolls[i] - 1, 24, diceRolls[i]));
+                    }
+                }
+                else{
+                    if (Backgammon.getPointAtId(24 - diceRolls[i]).getCheckers().size() == 0){
+                        continue;
+                    }
+                    if (Backgammon.getPointAtId(24 - diceRolls[i]).getCheckers().get(0).getColor() == this.color){
+                        nextMoves.add(new Move(24 - diceRolls[i], 24, diceRolls[i]));
+                    }
+                }
+            }
+        }
+
         for (Point p : points){
             if (p.getCheckers().size() == 0){
                 continue;
@@ -148,6 +172,10 @@ public class FarPlayer extends Player{
         ArrayList<Move> filteredMoves = new ArrayList<>();
 
         for (Move m : nextMoves){
+            if (m.getEndPoint() == 24){
+                filteredMoves.add(m);
+                continue;
+            }
             Point p = Backgammon.getPointAtId(m.getEndPoint());
             if (p == null){
                 continue;

@@ -26,6 +26,10 @@ public class Move{
             System.out.println("Move: Coming in on " + endPoint);
             return;
         }
+        if (endPoint == 24){
+            System.out.println("Move: Taking checker off of " + startPoint);
+            return;
+        }
         System.out.println("Move: " + startPoint + " -> " + endPoint);
     }
 
@@ -56,6 +60,14 @@ public class Move{
             }
 
             c.putOnPoint(p2);
+            return;
+        }
+
+        if (endPoint == 24){
+            // This indicates that this is a move where a piece is being taken off after all pieces are home
+
+            Checker c = p1.popChecker();
+            c.takeOff();
             return;
         }
 
