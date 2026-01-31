@@ -1,12 +1,18 @@
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Arrays;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.control.Button;
 
 public class Backgammon extends Application {
     public static final double WIDTH = 1040.0;
@@ -14,24 +20,17 @@ public class Backgammon extends Application {
     public static Player currentPlayer;
     private static Player p1;
     private static Player p2;
-    private static ArrayList<Point> points;
-    private static ArrayList<Checker> checkers;
+    private static ArrayList<Point> points = new ArrayList<>();
+    private static ArrayList<Checker> checkers = new ArrayList<>();
     private static ArrayList<Dice> die = new ArrayList<>();
     private static boolean isPlaying = true;
+    private static Stage primaryStage;
+    private static Pane root;
     
-    @Override
-    public void start(Stage primaryStage) {
-        Pane root = new Pane();
-        root.setStyle("-fx-background-color: #70412f;");
-        
-        Scene scene = new Scene(root, WIDTH+200, HEIGHT);
-        
-        primaryStage.setTitle("Backgammon");
-        primaryStage.setScene(scene);
-        
-        primaryStage.centerOnScreen();
-        
-        primaryStage.show();
+    public static void initializeGame(){
+        die.clear();
+        points.clear();
+        checkers.clear();
 
         Rectangle diceArea = new Rectangle(WIDTH, 0, 200, HEIGHT);
         diceArea.setFill(Color.web("#a82e23"));
@@ -73,6 +72,24 @@ public class Backgammon extends Application {
         p2 = new FarPlayer(1);
         currentPlayer = p1;
         currentPlayer.beginTurn();
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        Backgammon.primaryStage = primaryStage;
+        root = new Pane();
+        root.setStyle("-fx-background-color: #70412f;");
+        
+        Scene scene = new Scene(root, WIDTH+200, HEIGHT);
+        
+        primaryStage.setTitle("Backgammon");
+        primaryStage.setScene(scene);
+        
+        primaryStage.centerOnScreen();
+        
+        primaryStage.show();
+
+        initializeGame();
     }
     
     public static void main(String[] args) {
@@ -164,6 +181,10 @@ public class Backgammon extends Application {
         root.getChildren().addAll(checkers);
     }
 
+    public static boolean isPlaying(){
+        return isPlaying;
+    }
+
     public static void gameOver(){
         if (currentPlayer.getColor() == 0){
             System.out.println("WHITE WINS GAME OVER");
@@ -172,10 +193,48 @@ public class Backgammon extends Application {
             System.out.println("BLACK WINS GAME OVER");
         }
         isPlaying = false;
+
+        Platform.runLater(() -> showPopUpWindow());
     }
 
-    public static boolean isPlaying(){
-        return isPlaying;
-    }
+    private static void showPopUpWindow(){
+        Stage secondaryStage = new Stage();
+        secondaryStage.initModality(Modality.APPLICATION_MODAL);
+        secondaryStage.setTitle("Game Over");
+        
+        String winner;
+        if (currentPlayer.getColor() == 0) {
+            winner = "WHITE";
+        } else {
+            winner = "BLACK";
+        }
+        Label label = new Label(winner + " WINS");
+        label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 20px;");
+        
+        Button rematchButton = new Button("Rematch");
+        rematchButton.setOnAction(e -> {
+            secondaryStage.close();
+            root.getChildren().clear();
+            isPlaying = true;
+            initializeGame();
+        });
 
+        Button closeButton = new Button("Quit Game");
+        closeButton.setOnAction(e -> {
+            secondaryStage.close();
+            primaryStage.close();
+        });
+        
+        HBox buttonBox = new HBox(10, rematchButton, closeButton);
+        buttonBox.setAlignment(Pos.CENTER);
+
+        VBox vbox = new VBox(20, label, buttonBox);
+        vbox.setAlignment(Pos.CENTER);
+
+
+        
+        Scene secondaryScene = new Scene(vbox, 200, 150);
+        secondaryStage.setScene(secondaryScene);
+        secondaryStage.showAndWait(); 
+    }
 }
