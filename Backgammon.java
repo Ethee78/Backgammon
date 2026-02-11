@@ -150,7 +150,6 @@ public class Backgammon extends Application {
 
         checkers = new ArrayList<>();
         
-        /*
         for (int i = 0; i < 5; i++){
             checkers.add(new Checker(0, points.get(5)));
             checkers.add(new Checker(1, points.get(11)));
@@ -167,14 +166,14 @@ public class Backgammon extends Application {
             checkers.add(new Checker(1, points.get(0)));
             checkers.add(new Checker(0, points.get(23)));
         }
-        */
         
 
-
+        /*
         for (int i = 0; i < 6; i++){
             checkers.add(new Checker(0, points.get(i)));
             checkers.add(new Checker(1, points.get(23-i)));
         }
+        */
 
 
         
