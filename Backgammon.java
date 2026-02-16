@@ -68,8 +68,12 @@ public class Backgammon extends Application {
         System.out.println("Backgammon game started!");
 
         makeBoard(root);
-        p1 = new FarPlayer(0);
-        p2 = new FarPlayer(1);
+        p1 = 
+           new HumanPlayer(0);
+        // new FarPlayer(0); 
+        p2 = 
+        // new HumanPlayer(1);
+           new FarPlayer(1);
         currentPlayer = p1;
         currentPlayer.beginTurn();
     }

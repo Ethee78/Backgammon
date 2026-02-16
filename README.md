@@ -13,6 +13,7 @@ Once this is set to the correct path, the project can be compiled and run by jus
 
 The project can also be run by compiling and then running the Backgammon.java file using JavaFX.
 
+Change the lines assigning p1 and p2 near the end of the Backgammon class' initialiseGame method in order to switch whether the associated player is controlled by an AI or human player.
 
 ### Assets
 Dice graphics - https://poltergasm.itch.io/i-love-dice
