@@ -72,7 +72,7 @@ public class Backgammon extends Application {
            new HumanPlayer(0);
         // new FarPlayer(0); 
         p2 = 
-        // new HumanPlayer(1);
+        //   new HumanPlayer(1);
            new FarPlayer(1);
         currentPlayer = p1;
         currentPlayer.beginTurn();

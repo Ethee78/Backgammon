@@ -2,6 +2,8 @@ import javafx.animation.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 
 public class Dice extends ImageView{
 	public static final double HEIGHT = 60.0;
@@ -16,6 +18,13 @@ public class Dice extends ImageView{
 		setX(x);
 		setY(y);
 		diceVal = -1; // value of -1 represents that the dice has not been rolled yet
+
+		DropShadow glow = new DropShadow();
+		glow.setColor(Color.CYAN);
+		glow.setRadius(20);
+		glow.setSpread(0.5);
+
+		setEffect(glow);
 	}
 
 	private void loadDiceImages(){
@@ -29,6 +38,7 @@ public class Dice extends ImageView{
 
 	public void roll(){
 		if(diceVal == -1){
+			setEffect(null);
 			diceVal = (int)(Math.random() * 6) + 1;
 
 			rollAnimation = new Timeline();
@@ -59,5 +69,10 @@ public class Dice extends ImageView{
 
 	public void reset(){
 		diceVal = -1;
+		DropShadow glow = new DropShadow();
+		glow.setColor(Color.CYAN);
+		glow.setRadius(20);
+		glow.setSpread(0.5);
+		setEffect(glow);
 	}
 }
