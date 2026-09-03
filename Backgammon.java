@@ -78,10 +78,10 @@ public class Backgammon extends Application {
 
         makeBoard(root);
         p1 = 
-        //   new HumanPlayer(0);
-         new FarPlayer(0); 
+          // new HumanPlayer(0);
+        new FarPlayer(0); 
         p2 = 
-         //  new HumanPlayer(1);
+          // new HumanPlayer(1);
            new FarPlayer(1);
         currentPlayer = p1;
         currentPlayer.beginTurn();
@@ -165,8 +165,7 @@ public class Backgammon extends Application {
 
         checkers = new ArrayList<>();
 
-        
-        
+    
         for (int i = 0; i < 5; i++){
             checkers.add(new Checker(0, points.get(5)));
             checkers.add(new Checker(1, points.get(11)));
@@ -185,13 +184,16 @@ public class Backgammon extends Application {
         }
         
         
+        
         /*
-
         for (int i = 0; i < 7; i++){
             checkers.add(new Checker(0, points.get(i)));
             checkers.add(new Checker(1, points.get(23-i)));
         }
     
+        for (int i=0; i<6; i++){
+            checkers.add(new Checker(1, points.get(15)));
+        }
         */
 
         
@@ -227,6 +229,9 @@ public class Backgammon extends Application {
         }
         Label label = new Label(winner + " WINS");
         label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 20px;");
+
+        Label bLabel = new Label("BACKGAMMON!");
+        bLabel.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-padding: 20px; -fx-text-fill: red");
         
         Button rematchButton = new Button("Rematch");
         rematchButton.setOnAction(e -> {
@@ -245,12 +250,20 @@ public class Backgammon extends Application {
         HBox buttonBox = new HBox(10, rematchButton, closeButton);
         buttonBox.setAlignment(Pos.CENTER);
 
-        VBox vbox = new VBox(20, label, buttonBox);
+
+        VBox vbox = new VBox(15, label, buttonBox);
+        
+        if ((p1.allHome == false) || (p2.allHome == false)){
+            // this adds an extra message if a backgammon is achieved
+            vbox = new VBox(15, label, bLabel, buttonBox);
+        }
+
         vbox.setAlignment(Pos.CENTER);
+        
 
 
         
-        Scene secondaryScene = new Scene(vbox, 200, 150);
+        Scene secondaryScene = new Scene(vbox, 200, 200);
         secondaryStage.setScene(secondaryScene);
         secondaryStage.showAndWait(); 
     }
