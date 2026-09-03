@@ -63,7 +63,16 @@ public class Backgammon extends Application {
             }
         });
 
-        root.getChildren().addAll(dice1, dice2, rollDice);
+        Button skipTurn = new Button("   Skip Turn   ");
+        skipTurn.setLayoutY((HEIGHT-Dice.HEIGHT)/2 + Dice.HEIGHT + 60);
+        skipTurn.setLayoutX((200-2*Dice.HEIGHT)/3+WIDTH + 30);
+
+        skipTurn.setOnAction(event -> {
+            currentPlayer.endTurn();
+            System.out.println("Skipped Turn!");
+        });
+
+        root.getChildren().addAll(dice1, dice2, rollDice, skipTurn);
         
         System.out.println("Backgammon game started!");
 
@@ -72,8 +81,8 @@ public class Backgammon extends Application {
            new HumanPlayer(0);
         // new FarPlayer(0); 
         p2 = 
-        //   new HumanPlayer(1);
-           new FarPlayer(1);
+           new HumanPlayer(1);
+        //   new FarPlayer(1);
         currentPlayer = p1;
         currentPlayer.beginTurn();
     }

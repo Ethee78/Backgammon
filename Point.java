@@ -116,6 +116,10 @@ public class Point extends Polygon {
     public void clicked(){
         Player player = Backgammon.currentPlayer;
 
+        // TEST FEATURE
+        //System.out.println(id);
+        // END OF TEST
+
         if (!(player.getClass().getName().equals("HumanPlayer"))){
             return; // This ensures that clicking on a point does nothing if the current player is AI
         }

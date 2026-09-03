@@ -34,6 +34,48 @@ public abstract class Player{
 
     public void setDiceRolls(int[] diceRollsIn){
         diceRolls = diceRollsIn;
+        
+        if (checkValid() == false){
+            System.out.println("Turn Skipped");
+            endTurn();
+        }
+    }
+
+    public boolean checkValid(){
+        // this function is used to check if the player is able to bring any captured piece in
+        if (getColor() == 0){
+            if (Checker.numCapturedWhite != 0){
+                for(int roll : diceRolls){
+                    System.out.println(roll);
+                    Point p = Backgammon.getPointAtId(24 - roll);
+                    if(p == null){
+                        continue;
+                    }
+                    if ((p.getCheckers().size() < 1) || (p.getCheckers().get(0).getColor() == 0)){
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+        else{
+            if (Checker.numCapturedBlack != 0){
+                for(int roll : diceRolls){
+                    System.out.println(roll);
+                    Point p = Backgammon.getPointAtId(roll - 1);
+                    if(p == null){
+                        continue;
+                    }
+                    if ((p.getCheckers().size() < 1) || (p.getCheckers().get(0).getColor() == 1)){
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        return true;
+
     }
 
     public void updateAllHome(){
@@ -104,6 +146,12 @@ public abstract class Player{
                     Checker c = Checker.popCapturedW();
                     c.putOnPoint(p);
                     allHome = false;
+
+                    if (checkValid() == false){
+                        System.out.println("Turn Skipped");
+                        endTurn();
+                    }
+
                     return true;
                 }
             }
@@ -129,6 +177,12 @@ public abstract class Player{
                     Checker c = Checker.popCapturedB();
                     c.putOnPoint(p);
                     allHome = false;
+
+                    if (checkValid() == false){
+                        System.out.println("Turn Skipped");
+                        endTurn();
+                    }
+                    
                     return true;
                 }
             }
