@@ -5,6 +5,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.scene.input.MouseButton;
 
 
@@ -184,7 +185,6 @@ public class Point extends Polygon {
     }
 
 
-    ///// CURRENTLY WORKING ON THIS PART
 
     public void rightClicked(){
         Player player = Backgammon.currentPlayer;
@@ -192,6 +192,7 @@ public class Point extends Polygon {
         if (player.isAllHome()){
             if (player.getColor() == 0){
                 int[] rolls = player.getDiceRolls();
+                Arrays.sort(rolls);
                 for (int i = 0; i < 4; i++){
                     if (rolls[i] - 1 >= this.getPointId()){
                         if (this.checkers.get(0) == null){
@@ -210,6 +211,7 @@ public class Point extends Polygon {
             }
             else{
                 int[] rolls = player.getDiceRolls();
+                Arrays.sort(rolls);
                 for (int i = 0; i < 4; i++){
                     if (23 - rolls[i] < this.getPointId()){
                         if (this.checkers.get(0) == null){
