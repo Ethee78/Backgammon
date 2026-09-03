@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class Player{
     protected int[] diceRolls;
@@ -34,6 +35,10 @@ public abstract class Player{
 
     public void setDiceRolls(int[] diceRollsIn){
         diceRolls = diceRollsIn;
+
+        if (Arrays.equals(diceRolls, new int[]{0,0,0,0})){
+            endTurn();
+        }
         
         if (checkValid() == false){
             System.out.println("Turn Skipped");

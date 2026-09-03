@@ -5,6 +5,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import java.util.ArrayList;
+import javafx.scene.input.MouseButton;
 
 
 public class Point extends Polygon {
@@ -51,7 +52,14 @@ public class Point extends Polygon {
     	setLayoutX(x);
     	setLayoutY(y);
 
-        this.setOnMouseClicked(e->{this.clicked();});
+        this.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                this.clicked();
+            }
+            else if (event.getButton() == MouseButton.SECONDARY) {
+                this.rightClicked();
+            }
+        });
     }
 
     public double getX(){
@@ -117,7 +125,12 @@ public class Point extends Polygon {
         Player player = Backgammon.currentPlayer;
 
         // TEST FEATURE
+
         //System.out.println(id);
+        //System.out.println(this.getNumCheckers());
+
+        player.displayDiceRolls();
+
         // END OF TEST
 
         if (!(player.getClass().getName().equals("HumanPlayer"))){
@@ -167,6 +180,52 @@ public class Point extends Polygon {
                 System.out.println("INVALID MOVE!!");
             }
             
+        }
+    }
+
+
+    ///// CURRENTLY WORKING ON THIS PART
+
+    public void rightClicked(){
+        Player player = Backgammon.currentPlayer;
+
+        if (player.isAllHome()){
+            if (player.getColor() == 0){
+                int[] rolls = player.getDiceRolls();
+                for (int i = 0; i < 4; i++){
+                    if (rolls[i] - 1 >= this.getPointId()){
+                        if (this.checkers.get(0) == null){
+                            return;
+                        }
+                        else if (this.checkers.get(0).getColor() == 0){
+                            Checker c = this.popChecker();
+                            c.takeOff();
+                            rolls[i] = 0;
+                            player.setDiceRolls(rolls);
+                            player.updateAllHome();
+                            break;
+                        }
+                    }
+                }
+            }
+            else{
+                int[] rolls = player.getDiceRolls();
+                for (int i = 0; i < 4; i++){
+                    if (23 - rolls[i] < this.getPointId()){
+                        if (this.checkers.get(0) == null){
+                            return;
+                        }
+                        else if (this.checkers.get(0).getColor() == 1){
+                            Checker c = this.popChecker();
+                            c.takeOff();
+                            rolls[i] = 0;
+                            player.setDiceRolls(rolls);
+                            player.updateAllHome();
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 }
