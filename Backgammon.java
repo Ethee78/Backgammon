@@ -81,8 +81,8 @@ public class Backgammon extends Application {
          new HumanPlayer(0);
         //new FarPlayer(0); 
         p2 = 
-          new HumanPlayer(1);
-          // new FarPlayer(1);
+          //new HumanPlayer(1);
+           new FarPlayer(1);
         currentPlayer = p1;
         currentPlayer.beginTurn();
     }
@@ -165,7 +165,6 @@ public class Backgammon extends Application {
 
         checkers = new ArrayList<>();
 
-        /*
     
         for (int i = 0; i < 5; i++){
             checkers.add(new Checker(0, points.get(5)));
@@ -184,15 +183,15 @@ public class Backgammon extends Application {
             checkers.add(new Checker(0, points.get(23)));
         }
         
-        */
         
+        /*
         
         for (int i = 0; i < 7; i++){
             checkers.add(new Checker(0, points.get(i)));
             checkers.add(new Checker(1, points.get(23-i)));
         }
     
-        
+        */        
 
         
         root.getChildren().addAll(checkers);
