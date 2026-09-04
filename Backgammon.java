@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -94,6 +95,12 @@ public class Backgammon extends Application {
         root.setStyle("-fx-background-color: #70412f;");
         
         Scene scene = new Scene(root, WIDTH+200, HEIGHT);
+
+        Image icon = new Image(
+            getClass().getResourceAsStream("/icon.png")
+        );
+
+        primaryStage.getIcons().add(icon);
         
         primaryStage.setTitle("Backgammon");
         primaryStage.setScene(scene);
